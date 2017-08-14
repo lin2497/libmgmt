@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="libmgmtModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar(max)" />
+          <Property Name="author" Type="nvarchar(max)" />
+          <Property Name="publish_date" Type="nvarchar(max)" />
+          <Property Name="image_path" Type="nvarchar(max)" />
+          <Property Name="isbn" Type="nvarchar(max)" />
+          <Property Name="isNew" Type="bit" />
+        </EntityType>
+        <EntityType Name="book_order">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+          <Property Name="order_time" Type="datetime" />
+          <Property Name="first_name" Type="nvarchar(max)" />
+          <Property Name="last_name" Type="nvarchar(max)" />
+          <Property Name="company" Type="nvarchar(max)" />
+          <Property Name="tel" Type="nvarchar(max)" />
+          <Property Name="fax" Type="nvarchar(max)" />
+          <Property Name="country" Type="nvarchar(max)" />
+          <Property Name="city" Type="nvarchar(max)" />
+          <Property Name="post" Type="nvarchar(max)" />
+          <Property Name="address_1" Type="nvarchar(max)" />
+          <Property Name="address_2" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+          <Property Name="book_id" Type="int" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="order_detail">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_id" Type="int" />
+          <Property Name="book_id" Type="int" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+          <Property Name="first_name" Type="nvarchar(max)" />
+          <Property Name="last_name" Type="nvarchar(max)" />
+          <Property Name="tel" Type="nvarchar(max)" />
+          <Property Name="fax" Type="nvarchar(max)" />
+          <Property Name="country" Type="nvarchar(max)" />
+          <Property Name="post" Type="nvarchar(max)" />
+          <Property Name="city" Type="nvarchar(max)" />
+          <Property Name="address_1" Type="nvarchar(max)" />
+          <Property Name="address_2" Type="nvarchar(max)" />
+          <Property Name="company" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Wishlist">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+          <Property Name="book_id" Type="int" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Cart_book">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_detail_Book">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_detail_book_order">
+          <End Role="book_order" Type="Self.book_order" Multiplicity="0..1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="book_order">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wishlist_book">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="libmgmtModelStoreContainer">
+          <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="book_order" EntityType="Self.book_order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order_detail" EntityType="Self.order_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Wishlist" EntityType="Self.Wishlist" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cart_book" Association="Self.FK_Cart_book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_detail_Book" Association="Self.FK_order_detail_Book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_detail_book_order" Association="Self.FK_order_detail_book_order">
+            <End Role="book_order" EntitySet="book_order" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wishlist_book" Association="Self.FK_Wishlist_book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="Wishlist" EntitySet="Wishlist" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="libmgmtModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="author" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="publish_date" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="image_path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="isbn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="isNew" Type="Boolean" />
+          <NavigationProperty Name="Carts" Relationship="Self.FK_Cart_book" FromRole="Book" ToRole="Cart" />
+          <NavigationProperty Name="order_detail" Relationship="Self.FK_order_detail_Book" FromRole="Book" ToRole="order_detail" />
+          <NavigationProperty Name="Wishlists" Relationship="Self.FK_Wishlist_book" FromRole="Book" ToRole="Wishlist" />
+        </EntityType>
+        <EntityType Name="book_order">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="order_time" Type="DateTime" Precision="3" />
+          <Property Name="first_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="last_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="company" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tel" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="post" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="address_1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="address_2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="order_detail" Relationship="Self.FK_order_detail_book_order" FromRole="book_order" ToRole="order_detail" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="book_id" Type="Int32" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="Book" Relationship="Self.FK_Cart_book" FromRole="Cart" ToRole="Book" />
+        </EntityType>
+        <EntityType Name="order_detail">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_id" Type="Int32" />
+          <Property Name="book_id" Type="Int32" />
+          <NavigationProperty Name="Book" Relationship="Self.FK_order_detail_Book" FromRole="order_detail" ToRole="Book" />
+          <NavigationProperty Name="book_order" Relationship="Self.FK_order_detail_book_order" FromRole="order_detail" ToRole="book_order" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="first_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="last_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="tel" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="post" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="address_1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="address_2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="company" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Wishlist">
+          <Key>
+            <PropertyRef Name="auto_id" />
+          </Key>
+          <Property Name="auto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="book_id" Type="Int32" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="Book" Relationship="Self.FK_Wishlist_book" FromRole="Wishlist" ToRole="Book" />
+        </EntityType>
+        <Association Name="FK_Cart_book">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_detail_Book">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wishlist_book">
+          <End Role="Book" Type="Self.Book" Multiplicity="0..1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_order_detail_book_order">
+          <End Role="book_order" Type="Self.book_order" Multiplicity="0..1" />
+          <End Role="order_detail" Type="Self.order_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="book_order">
+              <PropertyRef Name="auto_id" />
+            </Principal>
+            <Dependent Role="order_detail">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="libmgmtEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Books" EntityType="Self.Book" />
+          <EntitySet Name="book_order" EntityType="Self.book_order" />
+          <EntitySet Name="Carts" EntityType="Self.Cart" />
+          <EntitySet Name="order_detail" EntityType="Self.order_detail" />
+          <EntitySet Name="UserInfoes" EntityType="Self.UserInfo" />
+          <EntitySet Name="Wishlists" EntityType="Self.Wishlist" />
+          <AssociationSet Name="FK_Cart_book" Association="Self.FK_Cart_book">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_detail_Book" Association="Self.FK_order_detail_Book">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wishlist_book" Association="Self.FK_Wishlist_book">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="Wishlist" EntitySet="Wishlists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_order_detail_book_order" Association="Self.FK_order_detail_book_order">
+            <End Role="book_order" EntitySet="book_order" />
+            <End Role="order_detail" EntitySet="order_detail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="libmgmtModelStoreContainer" CdmEntityContainer="libmgmtEntities">
+          <EntitySetMapping Name="Books">
+            <EntityTypeMapping TypeName="libmgmtModel.Book">
+              <MappingFragment StoreEntitySet="Book">
+                <ScalarProperty Name="auto_id" ColumnName="auto_id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="author" ColumnName="author" />
+                <ScalarProperty Name="publish_date" ColumnName="publish_date" />
+                <ScalarProperty Name="image_path" ColumnName="image_path" />
+                <ScalarProperty Name="isbn" ColumnName="isbn" />
+                <ScalarProperty Name="isNew" ColumnName="isNew" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="book_order">
+            <EntityTypeMapping TypeName="libmgmtModel.book_order">
+              <MappingFragment StoreEntitySet="book_order">
+                <ScalarProperty Name="auto_id" ColumnName="auto_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="order_time" ColumnName="order_time" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="company" ColumnName="company" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="post" ColumnName="post" />
+                <ScalarProperty Name="address_1" ColumnName="address_1" />
+                <ScalarProperty Name="address_2" ColumnName="address_2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="libmgmtModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="auto_id" ColumnName="auto_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="book_id" ColumnName="book_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order_detail">
+            <EntityTypeMapping TypeName="libmgmtModel.order_detail">
+              <MappingFragment StoreEntitySet="order_detail">
+                <ScalarProperty Name="auto_id" ColumnName="auto_id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="book_id" ColumnName="book_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInfoes">
+            <EntityTypeMapping TypeName="libmgmtModel.UserInfo">
+              <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="auto_id" ColumnName="auto_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="post" ColumnName="post" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="address_1" ColumnName="address_1" />
+                <ScalarProperty Name="address_2" ColumnName="address_2" />
+                <ScalarProperty Name="company" ColumnName="company" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wishlists">
+            <EntityTypeMapping TypeName="libmgmtModel.Wishlist">
+              <MappingFragment StoreEntitySet="Wishlist">
+                <ScalarProperty Name="auto_id" ColumnName="auto_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="book_id" ColumnName="book_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
